@@ -1,26 +1,28 @@
-var express = require('express');
-var path = require('path');
-var bodyParser = require('body-parser');
-var mysql = require('mysql');
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
+const mysql = require('mysql');
 
-var connection = require('./database');
-var issueRouter = require('./routes/issue_route');
-var voteRouter = require('./routes/vote_route');
-var userRouter = require('./routes/user_route');
+const connection = require('./database');
+const issueHandler = require('./controllers/issue_handler');
+const voteHandler = require('./controllers/vote_handler');
+const userHandler = require('./controllers/user_handler');
 
-var app = express();
-var PORT = process.env.PORT || 8000;
+const app = express();
+const PORT = process.env.PORT || 8000;
 
 app.use(bodyParser.json());
 
-app.use(express.static(path.join(__dirname,'../public')));
-app.use('/bundles', express.static(path.join(__dirname, '../bundles')))
+app.use(express.static(path.join(__dirname, '../public')));
+app.use('/bundles', express.static(path.join(__dirname, '../bundles')));
 
-app.use('/issue', issueRouter);
-app.use('/vote', voteRouter);
-app.use('/user', userRouter);
+app.get('/issue', issueHandler.getIssues);
+// app.get('/vote', voteHandler.getVote);
+app.post('/signup', userHandler.signup);
+app.post('/issue', issueHandler.postIssue);
+app.post('/vote', voteHandler.postVote);
+app.post('/signin', userHandler.signin);
 
-
-app.listen(PORT, function () {
+app.listen(PORT, () => {
   console.log('App is listening on PORT:', PORT);
 });

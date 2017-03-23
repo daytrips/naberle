@@ -1,38 +1,41 @@
--- DROP DATABASE naberle;
+DROP DATABASE naberle;
 
 CREATE DATABASE naberle;
 
 USE naberle;
 
--- default [status] is set to "Reported": 
--- some Admin would be responsible to 
--- change the status to 'Resolved' (not implemented).
+DROP TABLE IF EXISTS `users`;
 
-CREATE TABLE reported_issues (
-  user_id INT UNSIGNED NOT NULL,
-  reporter VARCHAR (25) NOT NULL,
-  description VARCHAR (200) NOT NULL,
-  lat VARCHAR (20) NOT NULL,
-  lng VARCHAR(20) NOT NULL,
-  type ENUM ('Trash', 'Road Work', 'Traffic Sign') NOT NULL,
-  status ENUM ('Reported', 'Resolved') NOT NULL,
-	rep_issue_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY
+CREATE TABLE `users` (
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(30) NOT NULL,
+  `password` VARCHAR(30) NOT NULL,
+  PRIMARY KEY (`id`)
 );
 
-CREATE TABLE users (
-  username VARCHAR (20) NOT NULL UNIQUE,
-  password VARCHAR (20) NOT NULL,
-  user_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY
+DROP TABLE IF EXISTS `issues`;
+
+CREATE TABLE `issues` (
+  `id` INTEGER NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(30) NOT NULL,
+  `type` VARCHAR(30) NOT NULL,
+  `description` MEDIUMTEXT NOT NULL,
+  `lat` INTEGER NOT NULL,
+  `lng` INTEGER NOT NULL,
+  `votes` INTEGER NOT NULL DEFAULT 0,
+  `user_id` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
 );
 
--- NOTE: we should keep track of who voted on what issue
--- and how many votes an issue has with a single table:
--- it is customary and safer to only retain one 
--- 'source' of truth for any given data point; i.e., 
--- we should not also have a 'number of votes' column 
--- in the reported_issues table.
-CREATE TABLE votes (
-  rep_issue_id INT UNSIGNED NOT NULL,
-  user_id INT UNSIGNED NOT NULL,
-  vote_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY
-);
+DROP TABLE IF EXISTS `users_votes`;
+
+  CREATE TABLE `users_votes` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `issue_id` INTEGER NOT NULL,
+    `user_id` INTEGER NOT NULL,
+    PRIMARY KEY (`id`)
+  );
+
+ALTER TABLE `issues` ADD FOREIGN KEY (user_id) REFERENCES `users` (`id`);
+ALTER TABLE `users_votes` ADD FOREIGN KEY (issue_id) REFERENCES `issues` (`id`);
+ALTER TABLE `users_votes` ADD FOREIGN KEY (user_id) REFERENCES `users` (`id`);
