@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
+import Header from '../containers/Header.jsx';
 
 export default class App extends Component {
   render() {
-    return <div>Hello</div>;
+    return (
+      <div>
+        <Header />
+      </div>
+    );
   }
 }
