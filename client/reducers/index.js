@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
+import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
+import signupReducer from './signup_reducer';
 
 const reducer = combineReducers({
-  test: (porps = {}) => porps,
-  test2: (porps = {}) => porps,
+  signedUp: signupReducer,
+  routing: routerReducer,
 });
 
 export default reducer;

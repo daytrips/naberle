@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(30) NOT NULL,
+  `username` VARCHAR(30) NOT NULL UNIQUE,
   `password` VARCHAR(30) NOT NULL,
   PRIMARY KEY (`id`)
 );

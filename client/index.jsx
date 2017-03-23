@@ -3,29 +3,25 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import ReduxPromise from 'redux-promise';
-import { Router, Route, browserHistory } from 'react-router';
+import { Router, Route, hashHistory } from 'react-router';
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
-console.log('browserHistory', browserHistory)
+
 import App from './components/App.jsx';
+import Signup from './containers/signup.jsx'
+import Signin from './containers/signin.jsx'
 import reducers from './reducers'; // models
 
 const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore)
-const store = createStoreWithMiddleware(
-  combineReducers({
-    reducers,
-    routing: routerReducer
-  })
-)
-
-console.log(reducers)
-// const store = applyMiddleware(ReduxPromise)(createStore)(reducers);
-const history = syncHistoryWithStore(browserHistory, store);
+const store = createStoreWithMiddleware(reducers)
+const history = syncHistoryWithStore(hashHistory, store);
 
 ReactDOM.render(
   <Provider store={store}>
-    { /* Tell the Router to use our enhanced history */ }
-    <Router history={browserHistory}>
-      <Route path="/" component={App} />
+    <Router history={hashHistory}>
+      <Route path="/" component={App} >
+        <Route path="signin" component={Signin} />
+        <Route path="signup" component={Signup} />
+      </Route>
     </Router>
   </Provider>,
   document.getElementById('mount'),

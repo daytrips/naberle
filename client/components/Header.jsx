@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { Link } from 'react-router';
 
-class Header extends Component {
+export default class Header extends Component {
   renderButtons() {
     if (this.props.authenticated) {
       return <li><a href="#">Signout</a></li>;
     }
-    return [<li key={1}><a href="#">Signin</a></li>,
-      <li key={2}><a href="#">Signup</a></li>];
+    return [<li key={1}><Link to="signin">Signin</Link></li>,
+      <li key={2}><Link to="signup">Signup</Link></li>];
   }
+
   render() {
     return (
       <nav className="navbar navbar-default">
@@ -24,5 +24,3 @@ class Header extends Component {
     );
   }
 }
-
-export default Header;
