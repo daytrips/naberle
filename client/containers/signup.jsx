@@ -2,19 +2,24 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { signup } from '../actions/index';
+import { hashHistory } from 'react-router';
 
 class Signup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
       username: '',
       password: '',
-      error: this.props.signedUp,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.signedUp.authenticated) {
+      hashHistory.push('/home');
+    }
   }
 
   handleChange(event) {
@@ -32,19 +37,16 @@ class Signup extends Component {
   }
 
   renderAlert() {
-    if (this.state.error) {
-      console.log(this.props.signedup.response.data.error);
+    if (this.props.signedUp && this.props.signedUp.error) {
       return (
         <div className="alert alert-danger">
-          <strong>{this.props.signedup.response.data.error}</strong>
+          <strong>{this.props.signedUp.error}</strong>
         </div>
       );
     }
   }
 
   render() {
-    // console.log(JSON.stringify(this.props.signedUp, null, 2));
-    console.log('this', this.state.error);
     return (
       <form className="signin" action="" onSubmit={this.handleSubmit}>
         <fieldset className="form-group">

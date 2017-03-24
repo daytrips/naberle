@@ -20,8 +20,8 @@ CREATE TABLE `issues` (
   `name` VARCHAR(30) NOT NULL,
   `type` VARCHAR(30) NOT NULL,
   `description` MEDIUMTEXT NOT NULL,
-  `lat` INTEGER NOT NULL,
-  `lng` INTEGER NOT NULL,
+  `lat` DOUBLE NOT NULL,
+  `lng` DOUBLE NOT NULL,
   `votes` INTEGER NOT NULL DEFAULT 0,
   `user_id` INTEGER NOT NULL,
   PRIMARY KEY (`id`)

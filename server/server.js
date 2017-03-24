@@ -17,7 +17,6 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/bundles', express.static(path.join(__dirname, '../bundles')));
 
 app.get('/issue', issueHandler.getIssues);
-// app.get('/vote', voteHandler.getVote);
 app.post('/signup', userHandler.signup);
 app.post('/issue', issueHandler.postIssue);
 app.post('/vote', voteHandler.postVote);

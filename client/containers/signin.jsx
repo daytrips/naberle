@@ -1,36 +1,46 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { signup } from '../actions/index';
+import { signin } from '../actions/index';
+import { hashHistory } from 'react-router';
 
-export default class Signin extends Component {
+class Signin extends Component {
   constructor(props) {
     super(props);
     this.state = {
       username: '',
       password: '',
     };
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.signedIn.authenticated) {
+      hashHistory.push('/home');
+    }
+  }
+
   handleChange(event) {
     const { value, name } = event.target;
     const state = {};
     state[name] = value;
     this.setState(state);
   }
+
   handleSubmit(event) {
     event.preventDefault();
-    const { username, password } = this.state;
+    const { email, username, password } = this.state;
     this.props.signin(username, password);
     this.setState({ username: '', password: '' });
   }
 
   renderAlert() {
-    if (this.props.hasErr) {
+    if (this.props.signedIn && this.props.signedIn.error) {
       return (
         <div className="alert alert-danger">
-          <strong>{this.props.hasErr === 'connection' ? 'Could not connect to server' : 'Incorrect login info'}</strong>
+          <strong>{this.props.signedIn.error}</strong>
         </div>
       );
     }
@@ -53,3 +63,13 @@ export default class Signin extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return { signedIn: state.signedIn };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ signin }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signin);
